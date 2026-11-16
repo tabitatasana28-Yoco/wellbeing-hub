@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cecyl Esau Mental Hub (prototype)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap">
+<style>
+:root{--bg:#F3F5F2;--card:#FAFBF9;--ink:#1D3A1F;--mute:#52705A;--line:#D2DFD0;
+--hu:#1B4332;--hp:#FFBA09;--lu:#011F7B;--lp:#5B0E14;--accent:#2E7D32;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#141C14;--card:#1D281D;--ink:#E6EFE4;--mute:#A5B8A3;--line:#2F3F2F;--hu:#1B4332;--hp:#FFBA09;--lu:#011F7B;--lp:#5B0E14;--accent:#7BD07A}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#141C14;--card:#1D281D;--ink:#E6EFE4;--mute:#A5B8A3;--line:#2F3F2F;--hu:#1B4332;--hp:#FFBA09;--lu:#011F7B;--lp:#5B0E14;--accent:#7BD07A}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif}
+main{max-width:640px;margin:0 auto;padding:28px 20px 60px}
+h1,h2{font-family:Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em;line-height:1.15;margin:0 0 10px}
+h1{font-size:2.3rem}h2{font-size:1.55rem}
+p{margin:0 0 14px}.mute{color:var(--mute);font-size:.95rem}
+.badge{display:inline-block;font-size:.85rem;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:2px 12px;margin-bottom:14px}
+.step{margin-top:30px}
+.axis{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mute);margin:6px 2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.q{border:0;border-radius:26px 40px 30px 36px;min-height:130px;padding:18px;text-align:left;color:var(--ink);cursor:pointer;font:inherit;transition:transform .2s}
+.q:nth-child(2){border-radius:40px 26px 36px 30px}.q:nth-child(3){border-radius:30px 36px 26px 40px}.q:nth-child(4){border-radius:36px 30px 40px 26px}
+.q:hover{transform:translateY(-3px)}
+.q b{display:block;font-family:Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:500;font-size:1.25rem;letter-spacing:-.005em}
+.q span{font-size:.9rem;opacity:.85}
+.hu{background:linear-gradient(135deg,#0D2818,#1B4332);color:#fff}.hp{background:var(--hp);color:#011F7B}.lu{background:var(--lu);color:#fff}.lp{background:var(--lp);color:#F5E6C0}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 18px;font:inherit;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;margin-top:14px}
+.link{background:none;border:0;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+.btn{background:var(--accent);color:var(--bg);border:0;border-radius:99px;padding:10px 24px;font:600 1rem Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif;cursor:pointer}
+.breath{display:flex;align-items:center;gap:18px;margin-top:14px}
+.orb{width:70px;height:70px;border-radius:50%;background:var(--brand,var(--accent));opacity:.8;flex:none}
+.orb.go{animation:br 14s ease-in-out 3}
+@keyframes br{0%,100%{transform:scale(.7)}30%{transform:scale(1.25)}50%{transform:scale(1.25)}}
+@media (prefers-reduced-motion:reduce){.orb.go{animation:none;transform:scale(1.1)}.q{transition:none}}
+.help{border-left:5px solid var(--accent)}
+.help li{margin-bottom:8px}ul{padding-left:20px;margin:0}
+.log{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.dot{border-radius:99px;padding:3px 14px;font-size:.9rem;color:#1D3A1F}
+.hero{position:relative;overflow:hidden;border-radius:30px;min-height:500px;padding:36px 22px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;color:#1D3A1F;background:radial-gradient(circle at 12% 88%,rgba(91,194,90,.22),transparent 38%),radial-gradient(circle at 92% 14%,rgba(91,194,90,.18),transparent 38%),#F3F5F2}
+.hero::before{content:"";position:absolute;inset:0;opacity:.22;mix-blend-mode:multiply;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero>*{position:relative}
+.hero h1{font-size:clamp(2.6rem,12vw,4.2rem);font-weight:600;letter-spacing:-.025em;line-height:1.02;margin:0;background:linear-gradient(180deg,#5CC45B 0%,#2E7D32 45%,#1E3B20 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .top{font-weight:600;font-size:.95rem}
+.hero .by{font-size:.95rem}
+.hero .btn{background:#1E3B20;color:#F3F5F2}
+.ring{position:absolute;width:96px;height:96px;border-radius:50%;border:14px solid #9BCB5A;border-color:#9BCB5A #9BCB5A transparent transparent;pointer-events:none}
+.r1{top:-44px;left:-44px;transform:rotate(-30deg)}.r2{bottom:-44px;right:-44px;transform:rotate(150deg)}
+.dia{position:absolute;width:30px;height:30px;border:2px solid #3FA84A;border-radius:6px;transform:rotate(45deg);box-shadow:0 0 10px rgba(63,168,74,.4),inset 0 0 8px rgba(63,168,74,.3);pointer-events:none}
+.dia::after{content:"";position:absolute;inset:-2px;border:2px solid #3FA84A;border-radius:6px;transform:translate(14px,14px)}
+.d1{top:26px;right:34px}.d2{bottom:34px;left:30px}
+.spark{position:absolute;width:26px;height:26px;pointer-events:none;filter:drop-shadow(0 0 5px rgba(91,194,90,.6));background:radial-gradient(circle,#5BC25A 0 14%,transparent 16%),linear-gradient(#5BC25A,#5BC25A) center/2px 100% no-repeat,linear-gradient(#5BC25A,#5BC25A) center/100% 2px no-repeat}
+.s1{top:34%;left:9%}.s2{bottom:26%;right:10%}
+.diag{position:absolute;width:2px;height:240px;background:#5BC25A;right:50px;bottom:-60px;transform:rotate(45deg);pointer-events:none}
+.poster{background:#E3EAF2;color:#0F1F6B;border-radius:26px;padding:20px 18px}
+.pbar{background:#101C66;color:#fff;font-family:Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif;text-align:center;border-radius:12px;padding:8px 12px;margin:20px 0 12px;font-size:1.05rem;font-weight:500}
+.pbar:first-child{margin-top:0}
+a.pbar{display:block;color:#fff;text-decoration:underline}
+a.pbar:focus-visible{outline:3px solid #F4C531;outline-offset:3px}
+.pt{color:#2B3A6B;font-size:.95rem;margin:0}
+.sos{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px 0}
+.sosb{background:#E0312B;color:#fff;font-weight:600;font-size:.8rem;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex:none}
+.bignum{color:#E0312B;font:600 2.4rem/1.1 Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif}
+.pl{padding-left:20px;margin:0;color:#1A2552;font-size:.95rem}.pl li{margin-bottom:6px}
+.visit{display:flex;align-items:center;gap:16px;background:#101C66;color:#F4C531;border-radius:16px;padding:14px 18px;text-decoration:none;margin-top:16px}
+.visit span{font:600 1.5rem/1 Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif}.visit i{font-style:normal;color:#fff;font-size:.88rem}
+.visit:focus-visible{outline:3px solid #F4C531;outline-offset:3px}
+.poster{padding:14px}
+.quads{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quad{border-radius:26px 40px 30px 36px;padding:18px;font-size:.95rem;min-width:0;overflow-wrap:anywhere}
+.quad:nth-child(2){border-radius:40px 26px 36px 30px}.quad:nth-child(3){border-radius:30px 36px 26px 40px}.quad:nth-child(4){border-radius:36px 30px 40px 26px}
+.quad h3{font:500 1.2rem/1.2 Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.005em;margin:0 0 10px}
+.quad h3 a{color:inherit;text-decoration:underline}
+.quad h3 a:focus-visible{outline:3px solid #101C66;outline-offset:3px}
+.quad p{margin:0 0 10px}
+.quad .pl{color:inherit;font-size:.9rem;padding-left:18px}
+.qa{background:#101C66;color:#fff}.qa .pt{color:#D5DBF5}
+.qa .sos{justify-content:flex-start;flex-wrap:wrap;gap:10px;margin:0 0 10px}
+.qa .sosb{width:40px;height:40px;font-size:.7rem}
+.qa .bignum{color:#F4C531;font-size:1.6rem}
+.qe{background:#C4231D;color:#fff}
+.erow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.35)}
+.erow:last-of-type{border-bottom:0}
+.erow b{font:600 1.5rem/1.1 Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif}
+.qc{background:#F4C531;color:#101C66}
+.qm{background:#fff;color:#101C66}
+.quad .visit{flex-direction:column;align-items:flex-start;padding:14px 16px;gap:6px;margin-top:14px}.quad .visit span{font-size:1.3rem;letter-spacing:.02em}.quad .visit i{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:560px){.quads{grid-template-columns:1fr}}
+.bub{position:absolute;padding:6px 14px;border-radius:99px;font-size:.85rem;color:#2B3A42;pointer-events:none;box-shadow:0 6px 16px rgba(0,0,0,.18);animation:fl 7s ease-in-out infinite}
+.b1{top:22%;left:5%;background:#B7D8C9}.b2{top:30%;right:5%;background:#F2E3B8;animation-delay:-2s}.b3{bottom:24%;left:6%;background:#C4C2E2;animation-delay:-4s}.b4{bottom:26%;right:6%;background:#F3CDBE;animation-delay:-1s}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.bub{animation:none}}
+.mark{width:56px;height:56px;border-radius:50%;border:2px solid #3FA84A;background:rgba(91,194,90,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.tiles{display:grid;gap:12px;margin-top:14px}
+.tile{display:flex;gap:14px;align-items:center;border-radius:22px;padding:16px 18px;color:var(--ink)}
+.tile svg{flex:none}.tile p{margin:0}
+.tile:nth-child(1){background:#5CC45B;color:#1D3A1F}.tile:nth-child(2){background:#2E7D32;color:#fff}.tile:nth-child(3){background:#1E3B20;color:#fff}
+body{transition:background .4s}
+@media (prefers-reduced-motion:reduce){body{transition:none}}
+body[data-mood="hu"]{--bg:#E1ECE5;--card:#EEF4F0;--accent:#1B4332;--brand:#1B4332;--ink:#0D2818;--mute:#4A6656;--line:#BFD3C7}
+body[data-mood="hp"]{--bg:#FFF2D0;--card:#FFF9E8;--accent:#9A5C00;--brand:#FFBA09;--ink:#3A2600;--mute:#7A5A1A;--line:#F0D58A}
+body[data-mood="lu"]{--bg:#E0E6F6;--card:#EEF1FA;--accent:#011F7B;--brand:#011F7B;--ink:#0A1840;--mute:#4B5A8A;--line:#BCC7E8}
+body[data-mood="lp"]{--bg:#F3E4E4;--card:#F9EFEF;--accent:#5B0E14;--brand:#5B0E14;--ink:#2E0508;--mute:#7A4A4E;--line:#E2C3C5}
+@media (prefers-color-scheme:dark){
+body[data-mood="hu"]{--bg:#0D2818;--card:#143323;--accent:#7FC8A0;--brand:#3E9B72;--ink:#E3F0E8;--mute:#9DBDAA;--line:#244A36}
+body[data-mood="hp"]{--bg:#2A1E00;--card:#3A2A05;--accent:#FFBA09;--brand:#FFBA09;--ink:#FFF2D0;--mute:#D9BD72;--line:#5A4210}
+body[data-mood="lu"]{--bg:#070F33;--card:#0E1A4A;--accent:#8FA6FF;--brand:#4C63D8;--ink:#E3E8FF;--mute:#9AA7D6;--line:#1F2D70}
+body[data-mood="lp"]{--bg:#2B070A;--card:#3A0D12;--accent:#E8909A;--brand:#B3303C;--ink:#F7E6E7;--mute:#C79A9E;--line:#5B1B22}}
+body[data-mood] main::before{content:"";display:block;height:8px;border-radius:99px;background:var(--brand);margin-bottom:18px}
+body[data-mood] #feelings .chip{border-color:var(--brand)}
+#r-body{border-left:6px solid var(--brand,var(--accent))}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}
+.navb{background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:99px;padding:6px 18px;font:500 .95rem Outfit,"Helvetica Neue",Helvetica,Arial,sans-serif;cursor:pointer}
+.navb:disabled{opacity:.35;cursor:default}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<div class="nav" id="nav" hidden><button class="navb" id="navback" aria-label="Go back">← Back</button><button class="navb" id="navfwd" aria-label="Go forward">Forward →</button></div>
+<span class="badge">Prototype: not a live service</span>
+<section id="s0" class="step" style="margin-top:18px">
+  <div class="hero">
+    <span class="ring r1"></span><span class="ring r2"></span><span class="dia d1"></span><span class="dia d2"></span><span class="spark s1"></span><span class="spark s2"></span><span class="diag"></span>
+    <div class="top">Student wellbeing space</div>
+    <div>
+      <div class="mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#1E3B20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28V16"/><path d="M16 18c0-5 3-8 9-8 0 6-3 9-9 8z"/><path d="M16 21c0-4-2-6-7-6 0 5 2 7 7 6z"/></svg></div>
+      <p style="margin:0 0 8px;font-size:1.05rem">Welcome. You’re in a safe space.</p>
+      <h1>Cecyl Esau Mental Hub</h1>
+      <p style="font-weight:600;margin:12px 0 24px">A calm place to check in, find support and feel heard</p>
+      <button class="btn" id="begin">Begin</button>
+    </div>
+    <div class="by"><button class="link" id="tohelp" style="color:#1E3B20">Need to talk to someone? See helplines</button></div>
+  </div>
+  </section>
+
+<section id="s6" class="step" hidden>
+  <h2>Here’s how it works</h2>
+  <p style="margin-top:0">This is a quiet corner made for students. Whether exams feel heavy or you just need a moment to yourself, you’re in the right place. No judgement and no pressure.</p>
+  <div class="tiles">
+    <div class="tile"><svg viewBox="0 0 32 32" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="12"/><path d="M11 18c1.5 3 8.5 3 10 0"/><circle cx="12" cy="13" r="1" fill="currentColor"/><circle cx="20" cy="13" r="1" fill="currentColor"/></svg><p><b>Check in.</b> Name how you’re feeling in a few gentle taps.</p></div>
+    <div class="tile"><svg viewBox="0 0 32 32" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 28V16"/><path d="M16 18c0-5 3-8 9-8 0 6-3 9-9 8z"/><path d="M16 21c0-4-2-6-7-6 0 5 2 7 7 6z"/></svg><p><b>Find a small step.</b> Get a kind, practical suggestion for right now.</p></div>
+    <div class="tile"><svg viewBox="0 0 32 32" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="12" r="4"/><circle cx="22" cy="13" r="3"/><path d="M4 27c0-5 3-8 7-8s7 3 7 8"/><path d="M20 21c4-1 8 1 8 6"/></svg><p><b>Reach real people.</b> See who you can talk to when you need more than an app.</p></div>
+  </div>
+  <p class="mute" style="margin-top:14px">Private by design: nothing you choose here is saved or shared.</p>
+  <p style="margin-top:20px"><button class="btn" id="cont">Start my check-in</button></p>
+</section>
+
+<section id="s1" class="step" style="margin-top:18px" hidden>
+  <h2>How are you feeling right now?</h2>
+  <p class="mute">Pick the colour that fits best. There’s no wrong answer.</p>
+  <div class="axis"><span>← Unpleasant</span><span>Pleasant →</span></div>
+  <div class="grid" role="group" aria-label="Choose how you feel">
+    <button class="q hu" data-q="hu"><b>Wound up</b><span>High energy, unpleasant</span></button>
+    <button class="q hp" data-q="hp"><b>Bright</b><span>High energy, pleasant</span></button>
+    <button class="q lu" data-q="lu"><b>Weighed down</b><span>Low energy, unpleasant</span></button>
+    <button class="q lp" data-q="lp"><b>Settled</b><span>Low energy, pleasant</span></button>
+  </div>
+</section>
+
+<section id="s2" class="step" hidden>
+  <h2>Which word fits best?</h2>
+  <div class="chips" id="feelings"></div>
+  <p style="margin-top:16px"><button class="link" id="back1">Start again</button></p>
+</section>
+
+<section id="s3" class="step" hidden>
+  <h2>What’s behind it? <span class="mute">(optional)</span></h2>
+  <div class="chips" id="ctx"></div>
+  <p style="margin-top:20px"><button class="btn" id="go">Show me something helpful</button></p>
+</section>
+
+<section id="s4" class="step" hidden>
+  <h2 id="r-title"></h2>
+  <div class="card" id="r-body"></div>
+  <div class="breath" id="breath" hidden>
+    <div class="orb" id="orb" aria-hidden="true"></div>
+    <div><button class="btn" id="bstart">Try a 1-minute breathing exercise</button>
+    <p class="mute" id="bcue" style="margin:8px 0 0" aria-live="polite">Breathe in as it grows, out as it shrinks.</p></div>
+  </div>
+  <div class="card help" id="help" hidden>
+    <h2>Please talk to someone today</h2>
+    <p>What you’re feeling is worth sharing with a real person. You don’t have to explain it perfectly.</p>
+    <ul>
+      <li>A trusted friend, floor rep or Res Com member</li>
+      <li><b>UWC Student Counselling (toll-free):</b> 0800 222 333</li>
+      <li>SADAG Suicide Crisis Line: 0800 567 567 (or SMS 31393)</li>
+      <li>If you’re in danger or thinking of ending your life, call the crisis line above or 112, or go to the nearest emergency room</li>
+    </ul>
+  </div>
+  <p style="margin-top:20px"><button class="btn" id="tosupport">See support and helplines</button></p>
+  <p style="margin-top:12px"><button class="link" id="back2">Check in again</button></p>
+  <div id="logbox" hidden><p class="mute" style="margin:26px 0 0">Your check-ins this session (cleared when you leave):</p><div class="log" id="log"></div></div>
+</section>
+
+<section id="s5" class="step" hidden>
+  <h2>Support and helplines</h2>
+  <p class="mute" style="margin-bottom:14px">You’re not alone. These services are here for you.</p>
+  <div class="poster">
+    <div class="quads">
+      <div class="quad qa">
+        <h3>UWC Student Counselling</h3>
+        <div class="sos"><span class="sosb">SOS</span><div><div class="pt">Toll-free helpline</div><div class="bignum">0800 222 333</div></div></div>
+        <p class="pt">Free, confidential counselling with social workers and psychologists. You don’t need to be in crisis to reach out.</p>
+      </div>
+      <div class="quad qe">
+        <h3>Emergency</h3>
+        <div class="erow"><span>Police</span><b>10111</b></div>
+        <div class="erow"><span>Ambulance</span><b>10177</b></div>
+        <div class="erow"><span>From a mobile</span><b>112</b></div>
+      </div>
+      <div class="quad qc">
+        <h3><a href="https://www.uwc.ac.za/campus-life/sds-departments/centre-for-student-support-services" target="_blank" rel="noopener">Campus support (CSSS)</a></h3>
+        <ul class="pl">
+          <li><b>Therapeutic Services:</b> free, confidential sessions (4 to 6). csss@uwc.ac.za, 021 959 2299, Former CHS Faculty Building, 2nd Floor</li>
+          <li><b>Group therapy:</b> weekday lunchtime sessions, plus a men-only group on Thursdays</li>
+          <li><b>Also through Therapeutic Services:</b> addiction counselling and support around African spiritual practices</li>
+          <li><b>Office for Students with Disabilities:</b> oswd@uwc.ac.za, 021 959 4170, Ground Floor, Former CHS Faculty Building</li>
+          <li><b>Office for Academic Skills:</b> csss@uwc.ac.za, 021 959 2299, Former CHS Faculty Building, 2nd Floor</li>
+          <li><b>Student Leadership Academy:</b> sla@uwc.ac.za, 021 959 2726, Student Centre, 3rd Floor</li>
+          <li><b>Wysa:</b> UWC’s anonymous mental health chatbot, available 24/7. It is an app, not a person, so call a helpline if you need to speak to someone.</li>
+          <li><b>In res:</b> your floor rep, a Res Com member or a trusted friend</li>
+        </ul>
+        <a class="visit" href="https://www.uwc.ac.za/campus-life/sds-departments/centre-for-student-support-services" target="_blank" rel="noopener"><span>VISIT CSSS</span><i>Open the UWC Centre for Student Support Services page</i></a>
+      </div>
+      <div class="quad qm">
+        <h3>More helplines</h3>
+        <ul class="pl">
+          <li><b>SADAG Suicide Crisis Line:</b> 0800 567 567 (or SMS 31393)</li>
+          <li><b>LifeLine South Africa:</b> 0861 322 322</li>
+          <li><b>Cipla Mental Health Helpline:</b> 0800 456 789</li>
+          <li><b>Netcare Akeso Crisis Line:</b> 0861 435 787</li>
+          <li><b>Substance Abuse Helpline:</b> 0800 12 13 14 (or SMS 32312)</li>
+          <li><b>GBV Command Centre:</b> 0800 428 428 or 0800 150 150</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:18px"><button class="link" id="back3">Back to start</button></p>
+</section>
+
+<section class="step"><p class="mute">This is a wellbeing support tool, not therapy or a diagnosis. In an emergency, contact emergency services.</p></section>
+</main>
+<script>
+const F={
+hu:["Anxious","Overwhelmed","Stressed","Frustrated","Restless"],
+hp:["Motivated","Hopeful","Excited","Proud","Energised"],
+lu:["Tired","Lonely","Low","Homesick","Hopeless"],
+lp:["Calm","Content","Relaxed","Grateful","Okay"]};
+const C=["Exams","Sleep","Money","Friends","Family","Homesickness","Res life","Something else"];
+const CL={hu:"#1B4332",hp:"#FFBA09",lu:"#011F7B",lp:"#5B0E14"},CT={hu:"#fff",hp:"#011F7B",lu:"#fff",lp:"#F5E6C0"};
+const T={
+hu:["Let’s bring it down a notch.","Your mind is moving fast. A slower breath tells your body it’s safe to ease off. Then pick one small thing, not everything."],
+hp:["Good. Let’s keep it going.","Notice what helped you get here, whether it was a person, a plan or a good night’s sleep. Doing more of that is a real strategy."],
+lu:["That sounds heavy. You’re not alone in it.","You don’t have to fix everything today. Do one small kind thing: drink water, step outside for five minutes, or message someone you trust."],
+lp:["Nice. Protect this feeling.","Take a moment to notice what’s working right now. Keeping simple routines like sleep, food and movement helps this last."]};
+const $=id=>document.getElementById(id);
+let q,f,ctx=new Set(),log=[];
+let H=[0],hi=0;
+function show(n,nav){["s0","s1","s2","s3","s4","s5","s6"].forEach((s,i)=>$(s).hidden=i!==n);if(n>=2&&n<=4&&q)document.body.dataset.mood=q;else delete document.body.dataset.mood;
+  if(!nav){H=H.slice(0,hi+1);H.push(n);hi=H.length-1}
+  $("navback").disabled=hi<=0;$("navfwd").disabled=hi>=H.length-1;$("nav").hidden=(hi<=0&&hi>=H.length-1)}
+document.querySelectorAll(".q").forEach(b=>b.onclick=()=>{
+  q=b.dataset.q;$("feelings").innerHTML="";
+  F[q].forEach(w=>{const c=document.createElement("button");c.className="chip";c.textContent=w;c.onclick=()=>{f=w;show(3)};$("feelings").append(c)});
+  show(2);$("s2").scrollIntoView({behavior:"smooth"})});
+C.forEach(w=>{const c=document.createElement("button");c.className="chip";c.textContent=w;c.setAttribute("aria-pressed","false");
+  c.onclick=()=>{ctx.has(w)?ctx.delete(w):ctx.add(w);c.setAttribute("aria-pressed",ctx.has(w))};$("ctx").append(c)});
+const R={
+Anxious:{t:"Anxiety is your mind trying to protect you.",w:"It often builds before exams or big changes, when uncertainty feels like a threat. Your heart may race and your thoughts may jump ahead to what could go wrong.",s:["Breathe out longer than you breathe in: in for 4, out for 6, a few times.","Write down the one thing you’re most worried about, then one small step you can take on it today.","Name 3 things you can see, 2 you can hear and 1 you can touch to come back to the present."]},
+Overwhelmed:{t:"Too much at once is a real thing.",w:"When everything feels urgent, your brain can’t tell what comes first, so it freezes or scatters.",s:["Brain-dump everything on paper, then circle just three things for today.","Start with the smallest task to get moving.","Give yourself permission to leave the rest for later."]},
+Stressed:{t:"Stress means something matters to you.",w:"It’s your body’s response to pressure, and it builds quietly through deadlines, money and people.",s:["Take a 10-minute walk or stretch away from your desk.","Work in short blocks: 25 minutes on, 5 minutes off.","Tell one person how your week has really been."]},
+Frustrated:{t:"Frustration usually means something is blocking you.",w:"It shows up when effort isn’t giving results, or when you feel unheard.",s:["Pause before reacting: count to ten or step outside for a minute.","Ask what exactly is blocking you and which part you can control.","Vent to someone you trust, or write it out first."]},
+Restless:{t:"Restless energy needs somewhere to go.",w:"Your body is revved up but your mind can’t settle, which is common when you’re waiting, worrying or have been sitting too long.",s:["Move: a quick walk, jog or some stretches.","Do a body scan and relax your shoulders, jaw and hands.","Pick a task that uses your hands or body to channel the energy."]},
+Motivated:{t:"Use this energy while you have it.",w:"Motivation is strongest when you have a clear goal and some momentum.",s:["Start your most important task now.","Set one small, specific goal for today so the momentum lasts.","Plan a break so you don’t burn out."]},
+Hopeful:{t:"Hope is worth holding onto.",w:"It means you can see a way forward, even if things aren’t perfect.",s:["Write down what you’re hopeful about and one step towards it.","Share it with someone who will cheer you on.","Remember this feeling for harder days."]},
+Excited:{t:"Excitement is a great sign.",w:"Something is giving you energy, and noticing what it is helps you do more of it.",s:["Note what’s exciting you so you can build on it.","Channel it into planning your next step.","Share the good news with a friend."]},
+Proud:{t:"You’ve earned this feeling.",w:"Pride shows your effort paid off, and students often skip past it.",s:["Name what you did well, out loud or on paper.","Thank or tell someone who helped you.","Keep a note of it to reread when things get tough."]},
+Energised:{t:"You’ve got fuel in the tank.",w:"Good sleep, movement or good company can all do this.",s:["Notice what gave you this energy so you can repeat it.","Use it on something that has been sitting on your list.","Keep the basics steady: sleep, food and water."]},
+Tired:{t:"Being tired is your body asking for care.",w:"Late nights, heavy workloads and emotional strain all drain energy, and exam season makes it worse.",s:["Drink some water and eat something small.","Rest for 20 minutes, with your phone away.","Plan an earlier night and drop one non-urgent task tonight."]},
+Lonely:{t:"Feeling lonely is more common than people admit.",w:"Res can be full of people and still feel isolating, especially when you’re new, far from home or going through something hard.",s:["Reach out to one person today, even with a short message.","Sit in a common area or join something small in res, with no pressure to talk much.","If it keeps weighing on you, talk to a counsellor or someone you trust."]},
+Low:{t:"Feeling low is hard, and you don’t have to push through it alone.",w:"It can come from stress, sleep, loss or things you can’t quite name.",s:["Do one small kind thing for yourself: a shower, fresh air or a meal.","Tell someone you trust how you’ve been feeling.","If it has lasted more than a couple of weeks, talk to a counsellor."]},
+Homesick:{t:"Missing home shows how much it matters to you.",w:"Being away from familiar people, food and routines is a big adjustment.",s:["Call or video chat someone from home.","Bring a little of home into your room: a photo, a meal or music.","Connect with others in res who are far from home too."]},
+Hopeless:{t:"Thank you for being honest. You don’t have to carry this alone.",w:"Hopelessness can make everything feel permanent, but it’s a feeling, and feelings can change with support.",s:["Please talk to someone today: a friend, your floor rep or a counsellor.","Call UWC Student Counselling on 0800 222 333.","If you might hurt yourself, call the SADAG Suicide Crisis Line on 0800 567 567 or 112 right now."]},
+Calm:{t:"Calm is worth noticing.",w:"Your mind and body are settled right now.",s:["Notice what helped you get here.","Use the calm for a task that needs focus.","Keep sleep and breaks steady to protect it."]},
+Content:{t:"Contentment is a quiet kind of happiness.",w:"Things feel good enough right now, which is a real win in a busy semester.",s:["Appreciate what’s going well.","Note what’s helping: people, routine or rest.","Do one small thing you enjoy."]},
+Relaxed:{t:"Good, you’ve found some ease.",w:"Relaxing helps your mind recover, and you’ll study better afterwards.",s:["Enjoy it without guilt.","Notice what helped you unwind and do it again.","Keep your wind-down habits for exam season."]},
+Grateful:{t:"Gratitude is good for you.",w:"Noticing what you’re thankful for builds resilience and strengthens relationships.",s:["Write down three things you’re grateful for.","Tell someone you appreciate them.","Come back to this on harder days."]},
+Okay:{t:"Okay is a perfectly good place to be.",w:"You don’t have to feel great all the time. Steady is a strength.",s:["Check the basics: sleep, food, water and movement.","Do one small thing that makes tomorrow easier.","Keep up this check-in habit."]}
+};
+$("go").onclick=()=>{
+  const r=R[f];
+  $("r-title").textContent="You’re feeling "+f.toLowerCase()+".";
+  let t="<p><b>"+r.t+"</b></p><p>"+r.w+"</p><p style='margin-bottom:6px'><b>Try this:</b></p><ul>"+r.s.map(x=>"<li style='margin-bottom:6px'>"+x+"</li>").join("")+"</ul><div style='height:14px'></div>";
+  if(ctx.has("Exams"))t+="<p><b>For exams:</b> pick one subject, study for 25 minutes, then take a real 5-minute break away from your phone. Repeat.</p>";
+  if(ctx.has("Sleep"))t+="<p><b>For sleep:</b> try to keep a steady bedtime this week, and put your phone away 30 minutes before.</p>";
+  if(ctx.has("Friends")||ctx.has("Family")||ctx.has("Homesickness"))t+="<p><b>For connection:</b> send one message to someone you trust. A short “thinking of you” counts.</p>";
+  if(ctx.has("Money"))t+="<p><b>For money worries:</b> you’re allowed to ask for help. Your floor rep or Res Com can point you to the right office.</p>";
+  $("r-body").innerHTML=t;
+  $("breath").hidden=!((q==="hu"||q==="lu")&&f!=="Hopeless");
+  $("help").hidden=!(f==="Hopeless"||f==="Lonely"||f==="Low"||ctx.size>=4&&q==="lu");
+  log.push([f,q]);$("log").innerHTML=log.map(l=>'<span class="dot" style="background:'+CL[l[1]]+';color:'+CT[l[1]]+'">'+l[0]+'</span>').join("");$("logbox").hidden=false;
+  show(4);$("s4").scrollIntoView({behavior:"smooth"})};
+$("bstart").onclick=()=>{const o=$("orb");o.classList.remove("go");void o.offsetWidth;o.classList.add("go");
+  $("bcue").textContent="In… hold… and slowly out. Repeat with the circle.";};
+$("begin").onclick=()=>{show(6);window.scrollTo({top:0,behavior:"smooth"})};
+$("cont").onclick=()=>{show(1);window.scrollTo({top:0,behavior:"smooth"})};
+$("navback").onclick=()=>{if(hi>0){hi--;show(H[hi],true);window.scrollTo({top:0})}};
+$("navfwd").onclick=()=>{if(hi<H.length-1){hi++;show(H[hi],true);window.scrollTo({top:0})}};
+$("tohelp").onclick=()=>{show(5);window.scrollTo({top:0,behavior:"smooth"})};
+$("tosupport").onclick=()=>{show(5);window.scrollTo({top:0,behavior:"smooth"})};
+$("back3").onclick=()=>{show(0);window.scrollTo({top:0,behavior:"smooth"})};
+$("back1").onclick=()=>show(1);
+$("back2").onclick=()=>{ctx.clear();document.querySelectorAll("#ctx .chip").forEach(c=>c.setAttribute("aria-pressed","false"));show(1);window.scrollTo({top:0,behavior:"smooth"})};
+</script>
+</body>
+</html>
